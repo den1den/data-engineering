@@ -78,8 +78,17 @@ print("Stops found: %s" % len(stop_names))
 print("Edges found: %s" % len(connections))
 print("Stop ids: %s" % stop_ids)
 
+
+def extract_minutesOfDay(time_str):
+    time_str = time_str.split(':')
+    time = int(time_str[0]) * 60 + int(time_str[1])
+    return time
+
+
 with open('../edges.csv', 'w', newline='') as csvfile:
     spamwriter = csv.writer(csvfile)
-    spamwriter.writerow(['source_id', 'target_id', 'start_time', 'end_time'])
+    spamwriter.writerow(['source_id', 'target_id', 'start_time', 'end_time', 'start_mod', 'end_mod'])
     for c in connections:
-        spamwriter.writerow([stop_ids[c[0]], stop_ids[c[1]], c[2], c[3]])
+        start_mod = extract_minutesOfDay(c[2])
+        end_mod = extract_minutesOfDay(c[3])
+        spamwriter.writerow([stop_ids[c[0]], stop_ids[c[1]], c[2], c[3], start_mod, end_mod])
